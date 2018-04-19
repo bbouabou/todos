@@ -1,9 +1,9 @@
-export const filterTodos = (state) => state.todos.todos.filter(elem =>{
+export const filterTodos = (state) => Object.keys(state.todos.todos).filter(elem =>{
   if (!state.todos.filter)
     return true;
-  else if (state.todos.filter === 1 && !elem.todo.completed)
+  else if (state.todos.filter === 1 && !state.todos.todos[elem].completed)
     return true;
-  else if (state.todos.filter === 2 && elem.todo.completed)
+  else if (state.todos.filter === 2 && state.todos.todos[elem].completed)
     return true;
   return false;
 });

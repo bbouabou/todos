@@ -18,7 +18,7 @@ class TodosComponent extends React.Component {
 
   handleTodoOnClick = (event, data) =>
   {
-    this.props.toggleChild(data.children.props.todo.id);
+    this.props.toggleChild(data.children.key);
   };
 
 
@@ -28,16 +28,16 @@ class TodosComponent extends React.Component {
   };
 
   render () {
-    const listTodo = this.props.todos.map((elem) => (<List.Item key={elem.id}><Todo todo={elem}/></List.Item>));
+    const listTodo = this.props.todosFiltered.map((elem) => (<List.Item key={elem}><Todo key={elem} todo={this.props.todos[elem]}/></List.Item>));
     return (
-      <Container>
+      <Container >
         <Input
           onChange={(e, { value }) => this.setState({inputTodo: value})}
           action={{content: "AddTodo", onClick: this.handleAddTodo }}
           value={this.state.inputTodo}
           placeholder={"todo"}/>
 
-        <List onItemClick={this.handleTodoOnClick} items={listTodo} />
+        <List divided relaxed onItemClick={this.handleTodoOnClick} items={listTodo} />
 
         <Radio
           label='All'
@@ -67,7 +67,8 @@ class TodosComponent extends React.Component {
 
 const TodosConnect = connect(
   (state) => ({
-    todos: filterTodos(state),
+    todos: state.todos.todos,
+    todosFiltered: filterTodos(state),
     filter: state.todos.filter
   }),
   {
