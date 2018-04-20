@@ -1,7 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Input, Container, List, Radio} from 'semantic-ui-react'
-import {addTodo, changeFilter, toggleChild} from "../redux/todos/actions";
+import {Input, Container, List, Radio, Segment, Loader, Dimmer} from 'semantic-ui-react'
+import { addTodoAsync, changeFilter, toggleChild } from "../redux/todos/actions";
 import {Todo} from "./Todo";
 import {filterTodos} from "../redux/todos/selector";
 
@@ -12,7 +12,7 @@ class TodosComponent extends React.Component {
 
   handleAddTodo = () =>
   {
-    this.props.addTodo(this.state.inputTodo);
+    this.props.addTodoAsync(this.state.inputTodo);
     this.setState({inputTodo: ''})
   };
 
@@ -31,6 +31,8 @@ class TodosComponent extends React.Component {
     const listTodo = this.props.todosFiltered.map((elem) => (<List.Item key={elem}><Todo key={elem} todo={this.props.todos[elem]}/></List.Item>));
     return (
       <Container >
+        <Segment>
+
         <Input
           onChange={(e, { value }) => this.setState({inputTodo: value})}
           action={{content: "AddTodo", onClick: this.handleAddTodo }}
@@ -38,7 +40,9 @@ class TodosComponent extends React.Component {
           placeholder={"todo"}/>
 
         <List divided relaxed onItemClick={this.handleTodoOnClick} items={listTodo} />
-
+          <Dimmer active={this.props.loading}>
+            <Loader />
+          </Dimmer>
         <Radio
           label='All'
           name='radioGroup'
@@ -60,6 +64,8 @@ class TodosComponent extends React.Component {
           onChange={this.handleRadioChange}
           value={2}
         />
+        </Segment>
+
       </Container>
     );
   }
@@ -67,12 +73,13 @@ class TodosComponent extends React.Component {
 
 const TodosConnect = connect(
   (state) => ({
+    loading: state.todos.loading,
     todos: state.todos.todos,
     todosFiltered: filterTodos(state),
     filter: state.todos.filter
   }),
   {
-    addTodo,
+    addTodoAsync,
     toggleChild,
     changeFilter
   })(TodosComponent);

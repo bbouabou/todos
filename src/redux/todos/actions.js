@@ -1,6 +1,12 @@
 export const ADD_TODO = "ADD_TODO";
 export const TOGGLE = "TOGGLE";
 export const CHANGE_FILTER = "CHANGE_FILTER";
+export const ADD_TODO_ASYNC = "ADD_TODO_ASYNC";
+export const ADD_IN_PROGRESS = "ADD_IN_PROGRESS";
+
+export const addInProgress = () => ({
+  type: ADD_IN_PROGRESS,
+});
 
 export const addTodo = (value) => ({
   type: ADD_TODO,
@@ -21,5 +27,15 @@ export const changeFilter = (filter) => ({
   payload:
     {
       filter
+    }
+});
+
+/** saga */
+
+export const addTodoAsync = (value) => ({
+  type: ADD_TODO_ASYNC,
+  payload:
+    {
+      value
     }
 });
